@@ -17,8 +17,8 @@ int FontOprRegister(P_FontOprType p_fontoprtype)
     {
         if(NULL == current->next)
         {
-            current = p_fontoprtype;
-            current->next=NULL;
+			p_fontoprtype->next = NULL;
+            current->next = p_fontoprtype;
             return 0;
         }
         current=current->next;

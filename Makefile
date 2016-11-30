@@ -21,7 +21,10 @@ OBJS:=main.o\
 	input/stdinput_thread.o\
 	input/inputmanager_thread.o\
 	debug/printmanager.o\
-	debug/serialprint.o
+	debug/serialprint.o\
+	debug/netprint.o\
+	network/netmanager.o\
+	network/netinit.o
 
 all:$(OBJS)
 	$(CC) $(LDFLAGS) -o main $^

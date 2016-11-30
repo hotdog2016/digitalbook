@@ -9,16 +9,17 @@ int DebugOprRegister(PT_DebugOpr pt_debugopr)
     PT_DebugOpr pt_current_debugopr = gpt_debugopr_head;
     if(pt_current_debugopr == NULL) 
     {
+		pt_debugopr->next = NULL;
         gpt_debugopr_head = pt_debugopr; 
-		gpt_debugopr_head->next = NULL;
         return 0;
     }
     while(pt_current_debugopr )
     {
         if(NULL == pt_current_debugopr->next)
         {
-            pt_current_debugopr= pt_debugopr;
-            pt_current_debugopr->next=NULL;
+
+			pt_debugopr->next = NULL;
+            pt_current_debugopr->next = pt_debugopr;
             return 0;
         }
         pt_current_debugopr=pt_current_debugopr->next;
@@ -68,6 +69,13 @@ static int ShowDebugOpr()
 int DebugInit()
 {
 	int err;
+
+//	err = NetDebugRegister();
+//	if(err < 0)
+//	{
+//		printf("<%s>:line%d Error : Serial debug register error\n",__FILE__,__LINE__);
+//	}
+
 	err = SerialDebugRegister();
 	if(err < 0)
 	{

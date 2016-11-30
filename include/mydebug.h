@@ -12,5 +12,5 @@ int DebugOprRegister(PT_DebugOpr pt_debugopr);
 int DebugPrint(const char *format, ...);
 int DebugInit();
 int SerialDebugRegister();
-
+int NetDebugRegister();
 #endif
