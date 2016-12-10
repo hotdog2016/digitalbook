@@ -1,3 +1,4 @@
+#include <types.h>
 #include <mydebug.h>
 #include <input.h>
 #include <stdio.h>

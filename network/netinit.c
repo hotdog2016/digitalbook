@@ -1,3 +1,4 @@
+#include <types.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
@@ -13,7 +14,10 @@
 #include <network.h>
 
 #define		SERVER_PORT                    6666
+#define		SERVER_PORT                    6666
 #define  	MSG_BUFFER_SIZE                1024
+#define  	MSG_BUFFER_SIZE                1024
+#define  	IP_BUFFER_SIZE                 16
 #define  	IP_BUFFER_SIZE                 16
 
 int server_fd , new_fd;

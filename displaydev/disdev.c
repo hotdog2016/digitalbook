@@ -1,16 +1,17 @@
+#include <types.h>
 #include <disdev.h>
 #include<string.h>
 #include<stdio.h>
 
-static P_DisDevINFO p_disdevinfo_head = NULL;
+static PT_DisDevINFO p_disdevinfo_head = NULL;
 
-int RegisterDisDev(P_DisDevINFO p_disdevinfo)
+int RegisterDisDev(PT_DisDevINFO ptDisDevInfo)
 {
-    P_DisDevINFO current = NULL;
-    P_DisDevINFO prev = NULL;
+    PT_DisDevINFO current = NULL;
+    PT_DisDevINFO prev = NULL;
     if(p_disdevinfo_head == NULL)
     {
-        p_disdevinfo_head = p_disdevinfo;
+        p_disdevinfo_head = ptDisDevInfo;
         p_disdevinfo_head->next = NULL;
         return 0;
     }
@@ -20,13 +21,14 @@ int RegisterDisDev(P_DisDevINFO p_disdevinfo)
        prev = current;
        current=current->next;
     }
-    prev->next = p_disdevinfo;
+    prev->next = ptDisDevInfo;
     prev->next->next = NULL;
     return 0;
 }
-P_DisDevINFO GetDevInfo(char *dev_name)
+
+PT_DisDevINFO GetDevInfo(char *dev_name)
 {
-    P_DisDevINFO current;
+    PT_DisDevINFO current;
     int check;
     current = p_disdevinfo_head;
     if(NULL == current)

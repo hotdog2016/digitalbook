@@ -12,20 +12,20 @@ typedef struct  FontBitmap{
     int next_pos_x;
     int next_pos_y;
     unsigned char *p_bitmap_buffer;
-}T_FontBitmap,*P_FontBitmap;
+}T_FontBitmap,*PT_FontBitmap;
 
 typedef struct FONTopr{
     char * name;
     int (*FontTypeInit)(void);
-    int (*GetFontBitmap)(unsigned int p_onefontencode , P_FontBitmap p_fontbitmap);
+    int (*GetFontBitmap)(unsigned int p_onefontencode , PT_FontBitmap p_fontbitmap);
     struct FONTopr * next;
-}T_FontOprType,*P_FontOprType;
+}T_FontOprType,*PT_FontOprType;
 
 
 
 int FontInit();
-int FontOprRegister(P_FontOprType p_fontoprtype);
-P_FontOprType GetFontOprType(char *name);
+int FontOprRegister(PT_FontOprType p_fontoprtype);
+PT_FontOprType GetFontOprType(char *name);
 int FreetypeRegister();
 int ExitFT();
 

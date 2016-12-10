@@ -4,15 +4,15 @@ CFLAGS:=-I$(PWD)/include
 CFLAGS+=-Wall -O2 -c
 CFLAGS+=-march=armv4t
 
-LDFLAGS:=-lfreetype -lm -lts -lpthread
+LDFLAGS:=-lfreetype -lm -lts -lpthread -ljpeg
 CC:=$(CROSSCOMPILE)gcc
 LD:=$(CROSSCOMPILE)ld
 
 OBJS:=main.o\
-	draw/draw.o\
-	draw/pageopr.o\
 	displaydev/fb.o\
 	displaydev/disdev.o\
+	drawtext/drawtext.o\
+	drawtext/pageopr.o\
 	font/freetype.o\
 	font/fontmanager.o\
 	encode/encodemanager.o\
@@ -24,7 +24,9 @@ OBJS:=main.o\
 	debug/serialprint.o\
 	debug/netprint.o\
 	network/netmanager.o\
-	network/netinit.o
+	network/netinit.o\
+	drawpicture/picmanager.o\
+	drawpicture/bmpanalyze.o
 
 all:$(OBJS)
 	$(CC) $(LDFLAGS) -o main $^

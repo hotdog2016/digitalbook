@@ -1,3 +1,4 @@
+#include <types.h>
 #include <mydebug.h>
 #include <font.h>
 #include <stdio.h>
@@ -8,7 +9,7 @@
 #include FT_GLYPH_H
 
 static int FreetypeInit(void);
-static int FreeTypeGetOneFontBitmap(unsigned int p_onefontencode , P_FontBitmap p_fontbitmap);
+static int FreeTypeGetOneFontBitmap(UINT32 p_onefontencode , PT_FontBitmap p_fontbitmap);
 
 static T_FontOprType gt_freetype={
     .name="freetype",
@@ -40,7 +41,7 @@ static int FreetypeInit()
     return 0;
 }
 
-static int FreeTypeGetOneFontBitmap(unsigned int p_onefontencode , P_FontBitmap p_fontbitmap)
+static int FreeTypeGetOneFontBitmap(UINT32 p_onefontencode , PT_FontBitmap p_fontbitmap)
 {
     int pen_x ,pen_y;
     pen_x = p_fontbitmap->cur_pos_x;
@@ -69,5 +70,7 @@ int ExitFT()
 }
 int FreetypeRegister()
 {
+
+	FreetypeInit();
     return FontOprRegister(&gt_freetype);
 }

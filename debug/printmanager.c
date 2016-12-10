@@ -1,28 +1,29 @@
+#include <types.h>
 #include <mydebug.h>
 #include<stdio.h>
 #include<stdarg.h>
 
 PT_DebugOpr gpt_debugopr_head = NULL;
 
-int DebugOprRegister(PT_DebugOpr pt_debugopr)
+int DebugOprRegister(PT_DebugOpr ptDebugOpr)
 {
-    PT_DebugOpr pt_current_debugopr = gpt_debugopr_head;
-    if(pt_current_debugopr == NULL) 
+    PT_DebugOpr current = gpt_debugopr_head;
+    if(current == NULL) 
     {
-		pt_debugopr->next = NULL;
-        gpt_debugopr_head = pt_debugopr; 
+		ptDebugOpr->next = NULL;
+        gpt_debugopr_head = ptDebugOpr; 
         return 0;
     }
-    while(pt_current_debugopr )
+    while(current )
     {
-        if(NULL == pt_current_debugopr->next)
+        if(NULL == current->next)
         {
 
-			pt_debugopr->next = NULL;
-            pt_current_debugopr->next = pt_debugopr;
+			ptDebugOpr->next = NULL;
+            current->next = ptDebugOpr;
             return 0;
         }
-        pt_current_debugopr=pt_current_debugopr->next;
+        current=current->next;
     }
     printf("can't add!\n");
     return -1;
@@ -30,25 +31,25 @@ int DebugOprRegister(PT_DebugOpr pt_debugopr)
 
 int DebugPrint(const char *Format, ...)
 {
-	PT_DebugOpr pt_current_debugopr = gpt_debugopr_head;
-	va_list targ;
-	char stringbuffer[1000];
-	char *p_buffertmp = NULL;
+	PT_DebugOpr current = gpt_debugopr_head;
+	va_list tArg;
+	char cMsgBuf[1000];
+	char *pcBuf = NULL;
 	int stringnum = 0;
-	va_start(targ,Format);
-	stringnum=vsprintf(stringbuffer,Format,targ);
-	va_end(targ); 
-	stringbuffer[stringnum] = '\0';
-	p_buffertmp = stringbuffer;
-	while(p_buffertmp)
+	va_start(tArg,Format);
+	stringnum=vsprintf(cMsgBuf,Format,tArg);
+	va_end(tArg); 
+	cMsgBuf[stringnum] = '\0';
+	pcBuf = cMsgBuf;
+	while(pcBuf)
 	{
-		while(pt_current_debugopr)
+		while(current)
 		{
-			if(pt_current_debugopr->iCanUse)
+			if(current->iCanUse)
 			{
-				pt_current_debugopr->DebugPrint(p_buffertmp);
+				current->DebugPrint(pcBuf);
 			}
-			pt_current_debugopr = pt_current_debugopr->next;
+			current = current->next;
 		}
 		return 0;
 	}
@@ -57,27 +58,27 @@ int DebugPrint(const char *Format, ...)
 
 static int ShowDebugOpr()
 {
-	PT_DebugOpr pt_current_debugopr = gpt_debugopr_head;
-	while(pt_current_debugopr)
+	PT_DebugOpr current = gpt_debugopr_head;
+	while(current)
 	{
-		printf("DebugOpr :%s\n",pt_current_debugopr->name);
-		pt_current_debugopr=pt_current_debugopr->next;
+		printf("DebugOpr :%s\n",current->name);
+		current=current->next;
 	}
 	return 0;
 }
 
 int DebugInit()
 {
-	int err;
+	int iError;
 
-//	err = NetDebugRegister();
-//	if(err < 0)
+//	iError = NetDebugRegister();
+//	if(iError < 0)
 //	{
-//		printf("<%s>:line%d Error : Serial debug register error\n",__FILE__,__LINE__);
+//		printf("<%s>:line%d Error : Serial debug register iErroror\n",__FILE__,__LINE__);
 //	}
 
-	err = SerialDebugRegister();
-	if(err < 0)
+	iError = SerialDebugRegister();
+	if(iError < 0)
 	{
 		printf("<%s>:line%d Error : Serial debug register error\n",__FILE__,__LINE__);
 	}

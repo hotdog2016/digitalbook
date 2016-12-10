@@ -1,3 +1,4 @@
+#include <types.h>
 #include <mydebug.h>
 #include <disdev.h>
 #include <sys/mman.h>
@@ -9,10 +10,11 @@
 #include <stdio.h>
 #include <string.h>
 
-static void LcdPutPixel(int x, int y, unsigned int color);
+static void LcdPutPixel(int iXres, int iYres, UINT32 uiColor);
 static int LcdInit();
 static int LcdCleanScreen();
-static T_DisDevINFO gt_fbinfo ={
+
+static T_DisDevINFO gtFBInfo ={
     .name         = "fb",
     .ShowPixel    = LcdPutPixel,
     .DeviceInit   = LcdInit,
@@ -21,45 +23,45 @@ static T_DisDevINFO gt_fbinfo ={
 
 static int LcdCleanScreen()
 {
-    memset(gt_fbinfo.fb_addr , 0 , gt_fbinfo.lcd_size);
+    memset(gtFBInfo.fb_addr , 0 , gtFBInfo.lcd_size);
     return 0;
 }
-static void LcdPutPixel(int x, int y, unsigned int color)
+static void LcdPutPixel(int iXres, int iYres, UINT32 uiColor)
 {
-	unsigned char *pen_8 = gt_fbinfo.fb_addr+y*gt_fbinfo.lcd_width+x*gt_fbinfo.pixel_bytes;
-	unsigned short *pen_16;	
-	unsigned int *pen_32;	
-	unsigned int red, green, blue;	
-    unsigned int pixel_bits;
+	BYTE *pcPixel8 = gtFBInfo.fb_addr+iYres*gtFBInfo.lcd_width+iXres*gtFBInfo.pixel_bytes;
+	UINT16 *pusPixel16;	
+	UINT32 *puiPixel32;	
+	UINT32 iRed, iGreen, iBlue;	
+    int iPixelBits;
 
-	pen_16 = (unsigned short *)pen_8;
-	pen_32 = (unsigned int *)pen_8;
-    pixel_bits =gt_fbinfo.pixel_bytes * 8; 
-	switch (pixel_bits)
+	pusPixel16 = (UINT16 *)pcPixel8;
+	puiPixel32 = (UINT32 *)pcPixel8;
+    iPixelBits = gtFBInfo.pixel_bytes * 8; 
+	switch (iPixelBits)
 	{
 		case 8:
 		{
-			*pen_8 = color;
+			*pcPixel8 = uiColor;
 			break;
 		}
 		case 16:
 		{
 			/* 565 */
-			red   = (color >> 16) & 0xff;
-			green = (color >> 8) & 0xff;
-			blue  = (color >> 0) & 0xff;
-			color = ((red >> 3) << 11) | ((green >> 2) << 5) | (blue >> 3);
-			*pen_16 = color;
+			iRed   = (uiColor >> 16) & 0xff;
+			iGreen = (uiColor >> 8) & 0xff;
+			iBlue  = (uiColor >> 0) & 0xff;
+			uiColor = ((iRed >> 3) << 11) | ((iGreen >> 2) << 5) | (iBlue >> 3);
+			*pusPixel16 = uiColor;
 			break;
 		}
 		case 32:
 		{
-			*pen_32 = color;
+			*puiPixel32 = uiColor;
 			break;
 		}
 		default:
 		{
-			DebugPrint("can't surport %dbpp\n", gt_fbinfo.pixel_bytes);
+			DebugPrint("can't surport %dbpp\n", gtFBInfo.pixel_bytes);
 			break;
 		}
     }
@@ -69,40 +71,40 @@ static void LcdPutPixel(int x, int y, unsigned int color)
 
 static int LcdInit()
 {
-    int check;
-    int fb_fd;
-    struct fb_fix_screeninfo fb_fix; 
-    struct fb_var_screeninfo fb_var;
+    int iError;
+    int iFBFd;
+    struct fb_fix_screeninfo tScreenFixInfo; 
+    struct fb_var_screeninfo tScreenVarInfo;
 
-    fb_fd = open("/dev/fb0",O_RDWR);
-    if(fb_fd < 0){
+    iFBFd = open("/dev/fb0",O_RDWR);
+    if(iFBFd < 0){
         DebugPrint("open fb is error!\n");
         return -1;
     }
 
-    check = ioctl(fb_fd , FBIOGET_VSCREENINFO , &fb_var);
-    if(check < 0){
+    iError = ioctl(iFBFd , FBIOGET_VSCREENINFO , &tScreenVarInfo);
+    if(iError < 0){
         DebugPrint("ioctl fb is error!\n");
         return -1;
     }
 
-    check = ioctl(fb_fd , FBIOGET_FSCREENINFO , &fb_fix);
-    if(check < 0){
+    iError = ioctl(iFBFd , FBIOGET_FSCREENINFO , &tScreenFixInfo);
+    if(iError < 0){
         DebugPrint("ioctl fb is error!\n");
         return -1;
     }
 
-    gt_fbinfo.lcd_width  = fb_var.xres *fb_var.bits_per_pixel / 8;
-    gt_fbinfo.pixel_bytes = fb_var.bits_per_pixel / 8;
-    gt_fbinfo.lcd_size   = fb_var.yres * fb_var.xres * fb_var.bits_per_pixel / 8;
-    gt_fbinfo.xres   = fb_var.xres;
-    gt_fbinfo.yres   = fb_var.yres;
+    gtFBInfo.lcd_width  = tScreenVarInfo.xres *tScreenVarInfo.bits_per_pixel / 8;
+    gtFBInfo.pixel_bytes = tScreenVarInfo.bits_per_pixel / 8;
+    gtFBInfo.lcd_size   = tScreenVarInfo.yres * tScreenVarInfo.xres * tScreenVarInfo.bits_per_pixel / 8;
+    gtFBInfo.xres   = tScreenVarInfo.xres;
+    gtFBInfo.yres   = tScreenVarInfo.yres;
 
-    gt_fbinfo.fb_addr = mmap(NULL ,  gt_fbinfo.lcd_size , 
+    gtFBInfo.fb_addr = mmap(NULL ,  gtFBInfo.lcd_size , 
             PROT_READ | PROT_WRITE , 
-            MAP_SHARED ,fb_fd , 0);
+            MAP_SHARED ,iFBFd , 0);
 
-    if(NULL == gt_fbinfo.fb_addr){
+    if(NULL == gtFBInfo.fb_addr){
         DebugPrint("can't map!\n");
         return -1;
     }
@@ -110,10 +112,10 @@ static int LcdInit()
     return 0;
 }
 
-
 int FBInit()
 {
-    return RegisterDisDev(&gt_fbinfo);
+	LcdInit();
+    return RegisterDisDev(&gtFBInfo);
 }
 
 

@@ -1,13 +1,14 @@
+#include <types.h>
 #include<mydebug.h>
 #include<stdio.h>
 
-static T_DebugOpr gt_serial_debugopr;
+static T_DebugOpr gtSerialDebugOpr;
 
-static int SerialDebugPrint(char *debug_msg)
+static int SerialDebugPrint(char *pcDebugMsg)
 {
-	if(debug_msg)	
+	if(pcDebugMsg)	
 	{
-		printf("%s",debug_msg);
+		printf("%s",pcDebugMsg);
 		return 0;
 	}
 	else{
@@ -16,7 +17,7 @@ static int SerialDebugPrint(char *debug_msg)
 	}
 }
 
-static T_DebugOpr gt_serial_debugopr = {
+static T_DebugOpr gtSerialDebugOpr = {
 	.name = "SerialDebug",
 	.iCanUse = 1,
 	.DebugPrint = SerialDebugPrint,
@@ -24,5 +25,5 @@ static T_DebugOpr gt_serial_debugopr = {
 
 int SerialDebugRegister()
 {
-	return DebugOprRegister(&gt_serial_debugopr);	
+	return DebugOprRegister(&gtSerialDebugOpr);	
 }

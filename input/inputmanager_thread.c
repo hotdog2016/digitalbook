@@ -1,3 +1,4 @@
+#include <types.h>
 #include <mydebug.h>
 #include <input.h>
 #include <unistd.h>
@@ -9,11 +10,11 @@ static pthread_mutex_t gt_event_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t  gt_event_cond  = PTHREAD_COND_INITIALIZER;
 int event;
 
-P_InputOpr gp_inputOpr_head=NULL;
-int RegisterInputOpr (P_InputOpr p_inputopr) 
+PT_InputOpr gp_inputOpr_head=NULL;
+int RegisterInputOpr (PT_InputOpr p_inputopr) 
 {
-    P_InputOpr current;
-    P_InputOpr prev;
+    PT_InputOpr current;
+    PT_InputOpr prev;
     if(gp_inputOpr_head == NULL)
     {
         gp_inputOpr_head = p_inputopr;
@@ -50,7 +51,7 @@ void *ThreadGetEvent(void * p_GetEventFuncAddr)
 
 int InitInputOpr()
 {
-    P_InputOpr current;
+    PT_InputOpr current;
     RegisterStdin();  
     RegisterTouchScreen();
 

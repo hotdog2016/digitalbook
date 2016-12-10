@@ -1,12 +1,13 @@
+#include <types.h>
 #include <encode.h>
 #include <string.h>
 
-P_Encodeopr gp_encodeoprhead=NULL;
+PT_Encodeopr gp_encodeoprhead=NULL;
 
-int EncodeRgister(P_Encodeopr p_encodeopr)
+int EncodeRgister(PT_Encodeopr p_encodeopr)
 {
-    P_Encodeopr current;
-    P_Encodeopr prev;
+    PT_Encodeopr current;
+    PT_Encodeopr prev;
     if(gp_encodeoprhead == NULL)
     {
         gp_encodeoprhead = p_encodeopr;
@@ -22,9 +23,10 @@ int EncodeRgister(P_Encodeopr p_encodeopr)
     return 0;
     
 }
-P_Encodeopr GetEncodeOpr(char * name)
+
+PT_Encodeopr GetEncodeOpr(char * name)
 {
-    P_Encodeopr current;
+    PT_Encodeopr current;
     current = gp_encodeoprhead;
     while(current)
     {
@@ -36,6 +38,7 @@ P_Encodeopr GetEncodeOpr(char * name)
     }
     return NULL;
 }
+
 int EncodeInit()
 {
     Utf8Register(); 

@@ -1,13 +1,14 @@
+#include <types.h>
 #include <network.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-static    P_NetEntity    gp_netentity_head;
+static    PT_NetEntity    gp_netentity_head;
 
-int NetworkRegister(P_NetEntity p_netentity)
+int NetworkRegister(PT_NetEntity p_netentity)
 {
-    P_NetEntity current;
+    PT_NetEntity current;
     current = gp_netentity_head;
     if(current == NULL) 
     {
@@ -28,9 +29,9 @@ int NetworkRegister(P_NetEntity p_netentity)
     return -1;
 }
 
-int ListLink(P_NetEntity p_netentity)
+int ListLink(PT_NetEntity p_netentity)
 {
-	P_NetEntity current;
+	PT_NetEntity current;
 	current = p_netentity;
 	while(current)
 	{
@@ -42,7 +43,7 @@ int ListLink(P_NetEntity p_netentity)
 
 int GetSocketfd(int * server_fd ,char * protocol)
 {
-	P_NetEntity current;
+	PT_NetEntity current;
 	current = gp_netentity_head;
 
 	while(current)

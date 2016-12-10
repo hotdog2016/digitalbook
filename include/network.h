@@ -5,13 +5,11 @@ typedef struct netentity{
 	char * protocol;
 	int server_fd;
 	struct netentity * next;
-}T_NetEntity , *P_NetEntity;
+}T_NetEntity , *PT_NetEntity;
 
-int NetworkRegister(P_NetEntity p_netentity);
+int NetworkRegister(PT_NetEntity p_netentity);
 int NetworkInit();
 int TcpNetInit();
 int GetSocketfd(int * server_fd ,char * protocol);
 #endif
-
-
 

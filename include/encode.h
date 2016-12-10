@@ -2,12 +2,12 @@
 #define _ENCODE_H
 typedef struct Encodeopr {
     char *name;
-    int (*GetEncode)(unsigned int * onefontencode,unsigned char *);
+    int (*GetEncode)(unsigned int * onefontencode,char *pcCurrentAddr);
     struct Encodeopr * next;
-}T_EncodeOpr , *P_Encodeopr;
+}T_EncodeOpr , *PT_Encodeopr;
 
 int Utf8Register();
-int EncodeRgister(P_Encodeopr p_encodeopr);
+int EncodeRgister(PT_Encodeopr p_encodeopr);
 int EncodeInit();
-P_Encodeopr GetEncodeOpr(char * name);
+PT_Encodeopr GetEncodeOpr(char * name);
 #endif

@@ -13,15 +13,15 @@ typedef struct InputOpr {
     int fd;
     pthread_t tid;
     int event_type;
-    struct InputOpr * next;
     int (*Exit)(void);
     int (*Init)(void);
-}* P_InputOpr , T_InputOpr;
+    struct InputOpr * next;
+}* PT_InputOpr , T_InputOpr;
 
 int RegisterTouchScreen();
 int RegisterStdin();
-int RegisterInputOpr (P_InputOpr p_inputopr);
-P_InputOpr GetInputOpr(char * name);
+int RegisterInputOpr (PT_InputOpr p_inputopr);
+PT_InputOpr GetInputOpr(char * name);
 int InitInputOpr();
 int GetEvent();
 #endif

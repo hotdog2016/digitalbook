@@ -1,3 +1,4 @@
+#include <types.h>
 #include <mydebug.h>
 #include <input.h>
 #include <unistd.h>
@@ -5,13 +6,13 @@
 #include <stdio.h>
 #include <string.h>
 
-P_InputOpr gp_inputOpr_head=NULL;
+PT_InputOpr gp_inputOpr_head=NULL;
 fd_set  g_select_queue;
 int max_fd = 0;
-int RegisterInputOpr (P_InputOpr p_inputopr) 
+int RegisterInputOpr (PT_InputOpr p_inputopr) 
 {
-    P_InputOpr current;
-    P_InputOpr prev;
+    PT_InputOpr current;
+    PT_InputOpr prev;
     if(gp_inputOpr_head == NULL)
     {
         gp_inputOpr_head = p_inputopr;
@@ -30,7 +31,7 @@ int RegisterInputOpr (P_InputOpr p_inputopr)
 
 int InitInputOpr()
 {
-    P_InputOpr current;
+    PT_InputOpr current;
     RegisterTouchScreen();
     RegisterStdin();
     current = gp_inputOpr_head;
@@ -45,9 +46,9 @@ int InitInputOpr()
         return 0;
 }
 
-P_InputOpr GetInputOpr(char * name)
+PT_InputOpr GetInputOpr(char * name)
 {
-    P_InputOpr current;
+    PT_InputOpr current;
     current = gp_inputOpr_head;
     while(current)
     {
@@ -60,10 +61,10 @@ P_InputOpr GetInputOpr(char * name)
     return NULL;
 }
 
-static int SetSelectMode(P_InputOpr p_inputdev_head)
+static int SetSelectMode(PT_InputOpr p_inputdev_head)
 {
     struct timeval wait_time;
-    P_InputOpr current = p_inputdev_head;
+    PT_InputOpr current = p_inputdev_head;
 
     wait_time.tv_sec = 3;
     wait_time.tv_usec = 0;
@@ -80,7 +81,7 @@ static int SetSelectMode(P_InputOpr p_inputdev_head)
 
 int GetEvent()
 {
-    P_InputOpr current = gp_inputOpr_head;
+    PT_InputOpr current = gp_inputOpr_head;
 
     SetSelectMode(current);
 

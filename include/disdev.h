@@ -1,3 +1,5 @@
+#ifndef __DISDEV__H
+#define __DISDEV__H
 typedef struct DisDevINFO {
     char *name;
     int xres;
@@ -10,9 +12,13 @@ typedef struct DisDevINFO {
     int (*DeviceInit)();
     int (*CleanScreen)();
     struct  DisDevINFO * next;
-}T_DisDevINFO , *P_DisDevINFO;
+}T_DisDevINFO , *PT_DisDevINFO;
 
-int RegisterDisDev(P_DisDevINFO p_disdevinfo);
-P_DisDevINFO GetDevInfo(char *dev_name);
+int RegisterDisDev(PT_DisDevINFO p_disdevinfo);
+PT_DisDevINFO GetDevInfo(char *dev_name);
 int DisplayInit();
 int FBInit();
+
+
+#endif
+

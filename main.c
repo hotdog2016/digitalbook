@@ -1,5 +1,9 @@
+#include <bitmapinfo.h>
+#include <types.h>
 #include <mydebug.h>
+#include <encode.h>
 #include <font.h>
+#include <disdev.h>
 #include <draw.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,25 +13,21 @@
 int main(int argc , char ** argv)
 {
 
+	char * TextName = "hanzi.txt";
 //	NetworkInit();
 
 	DebugInit();
+    DisplayInit();
+ //   FontInit();
+  //  EncodeInit();
 
-	DebugPrint("debug init ok\n");
+	GetBMPFileInfo();
+//	ShowPicDetail();
 
-    LoadText();
 
-    SetDisDev();
+   // InitInputOpr();
 
-    InitInputOpr();
-
-    SetFont();
-
-    SetEncode();
-    
-    ShowText();
-
-    ExitFT();
-
+  // ShowText(TextName);
+   // ExitFT();
     return 0;
 }

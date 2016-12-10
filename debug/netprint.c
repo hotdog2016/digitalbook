@@ -1,3 +1,4 @@
+#include <types.h>
 #include<mydebug.h>
 #include<network.h>
 #include<stdio.h>
@@ -5,55 +6,56 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #define                           CYCLIC_BUFFER_SIZE               1024
+#define                           CYCLIC_BUFFER_SIZE               1024
 
-static T_DebugOpr gt_net_debugopr;
-static int write=0 , read=0;
-static char  g_cyclic_buffer[CYCLIC_BUFFER_SIZE];
-int server_fd;
-static int writeBuffer(char* buffer , char const * source , int buffer_size)
+static T_DebugOpr gtNetDebugOpr;
+static int giWriteBytes=0 , giReadBytes=0;
+static char  gcCyclicBuffer[CYCLIC_BUFFER_SIZE];
+//int server_fd;
+static int writeBuffer(char* pcBuf , char const * pcSource , int iBufSizes)
 {
 	int i;
-	for(i=0 ; i<buffer_size ; i++)
+	for(i=0 ; i<iBufSizes ; i++)
 	{
-		if((write+1) % CYCLIC_BUFFER_SIZE == read)
+		if((giWriteBytes+1) % CYCLIC_BUFFER_SIZE == giReadBytes)
 		{
 			printf("Cyclic buffer is full\n");
 			return -1;
 		}
-			strncpy(&buffer[write] , &source[i] ,1);	
-			write = (write + 1) % CYCLIC_BUFFER_SIZE;
+			strncpy(&pcBuf[giWriteBytes] , &pcSource[i] ,1);	
+			giWriteBytes = (giWriteBytes + 1) % CYCLIC_BUFFER_SIZE;
 	}
 	return 0;
 }
 
-static int readBuffer(char const * buffer , int buffer_size)
+static int readBuffer(char const * pcBuf , int iBufSizes)
 {
 	int i;
-	int server_fd;
-	GetSocketfd(&server_fd,"TCP");
-	for(i=0 ; i<buffer_size ; i++)
+	int iServerFd;
+	GetSocketfd(&iServerFd,"TCP");
+	for(i=0 ; i<iBufSizes ; i++)
 	{
-		if(read == write)
+		if(giReadBytes == giWriteBytes)
 		{
 			printf("Cyclic is empty\n");
 			return -1;
 		}
-		send(server_fd, &buffer[read], 1, 0);
-		read = (read + 1) % CYCLIC_BUFFER_SIZE;
+		send(iServerFd, &pcBuf[giReadBytes], 1, 0);
+		giReadBytes = (giReadBytes + 1) % CYCLIC_BUFFER_SIZE;
 	}
 	return 0;
 }
 
-static int NetDebugPrint(char *debug_msg)
+static int NetDebugPrint(char *pcDebugMsg)
 {
-	int string_len = 0; 
+	int iMsgSizes = 0; 
 
-	string_len = strlen(debug_msg);
+	iMsgSizes = strlen(pcDebugMsg);
 
-	if(debug_msg)	
+	if(pcDebugMsg)	
 	{
-		writeBuffer(g_cyclic_buffer , debug_msg , string_len);
-		readBuffer(g_cyclic_buffer ,string_len);
+		writeBuffer(gcCyclicBuffer , pcDebugMsg , iMsgSizes);
+		readBuffer(gcCyclicBuffer ,iMsgSizes);
 		return 0;
 	}
 	else{
@@ -62,7 +64,7 @@ static int NetDebugPrint(char *debug_msg)
 	}
 }
 
-static T_DebugOpr gt_net_debugopr = {
+static T_DebugOpr gtNetDebugOpr = {
 	.name = "NetDebug",
 	.iCanUse = 1,
 	.DebugPrint = NetDebugPrint,
@@ -70,7 +72,7 @@ static T_DebugOpr gt_net_debugopr = {
 
 int NetDebugRegister()
 {
-	return DebugOprRegister(&gt_net_debugopr);	
+	return DebugOprRegister(&gtNetDebugOpr);	
 }
 
 

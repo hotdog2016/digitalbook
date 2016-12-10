@@ -1,3 +1,4 @@
+#include <types.h>
 #include <mydebug.h>
 #include <disdev.h>
 #include <input.h>
@@ -33,7 +34,7 @@ static int Isoutof500ms(struct timeval *pre , struct timeval *samptime)
 static int TouchScreenGetEvent()
 {
     int ret;
-    P_DisDevINFO pt_fbinfo; 
+    PT_DisDevINFO pt_fbinfo; 
     pt_fbinfo = GetDevInfo("fb");
 
     ret = ts_read(ts, &samp, 1);

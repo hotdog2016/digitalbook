@@ -1,21 +1,22 @@
+#include <types.h>
 #include <mydebug.h>
 #include <encode.h>
 #include <stdio.h>
 #include <unistd.h>
 
-static int Utf8GetEncode(unsigned int * onefontencode,unsigned char * current_addr);
+static int Utf8GetEncode(UINT32 * onefontencode,char * current_addr);
 
 static T_EncodeOpr gt_utf8opr={
     .name="utf-8",
     .GetEncode=Utf8GetEncode,
 };
 
-static int Utf8GetEncode(unsigned int * onefontencode,unsigned char * current_addr)
+static int Utf8GetEncode(UINT32 * onefontencode,char * current_addr)
 {
     int i;
     int bytes=0;
-    unsigned char headbyte=0;
-    unsigned int encode_tmp=0;
+    BYTE headbyte=0;
+    UINT32 encode_tmp=0;
     headbyte=current_addr[0];
     if(!((headbyte >> 7)&0x1))
     {
